@@ -1,40 +1,40 @@
 # Hardware test status
 
-Tested 2026-11-05/06 on an SM-X900 (12 GB, board revision 5, bootloader
+Tested 2026-11-05 to 2026-11-09 on an SM-X900 (12 GB, board revision 5, bootloader
 X900XXU9DYDC) running OrangeFox R12.0 from `fox_16.0` (Android 16 base) with the
-stock X900XXS9EZA3 kernel (5.10.236) and modules.
+stock X900XXS9EZA3 kernel (5.10.236) and modules. Latest tested build: r12.
 
 | Feature | Status |
 |---|---|
 | Boots to OrangeFox | works |
-| Display (msm_drm, 2960x1848, portrait UI) | works: upright with the USB port at the bottom |
-| Touch (Goodix GT6936) | works: taps land where touched (owner-confirmed) |
-| Screen timeout / blank | works; the touch panel is off while blanked, so wake with Power |
+| Display (msm_drm, 2960x1848) | works: portrait UI, upright with the USB port at the bottom |
+| Touch (Goodix GT6936) | works: measured 1:1 (clock tap at raw 188,82; battery at 1610,71) |
+| Screen timeout / blank | works; wake with the Power key (see tap-to-wake below) |
 | Brightness | works (0-395) |
 | Battery level / charging | works |
 | CPU temperature | works (`cpuss-0`, thermal_zone25) |
+| Clock | works: Android users get the time from /persist/time/ats_2 automatically; otherwise run `adb shell gts8u-time set $(date +%s)` once and the offset is kept on the cache partition |
+| Flashlight | works (led:torch_0 + led:switch_2; the driver limits the torch to 250) |
+| Vibration | works (Samsung dc_vibrator through timed_output) |
 | adb (USB) | works |
 | MTP | works (adb and MTP together) |
 | Mounts: system, system_ext, product, vendor, odm, vendor_dlkm (super) | works (dm-linear, read-only f2fs) |
 | Mounts: metadata, cache, efs, sec_efs, persist, firmware, prism, optics | works |
 | MicroSD (`mmcblk1`) | works |
-| Backup (boot, dtbo, vbmeta) | works; images match the partitions byte for byte |
-| Reboot to system / recovery, power off | works |
-| Reboot to fastboot | hidden from r12 (OF_NO_REBOOT_FASTBOOT); on Samsung it landed in Download Mode |
-| Zip install | not yet tested |
-| Restore | not yet tested |
+| Backup | works; images match the partitions byte for byte |
+| Restore | works (recovery partition restored, hash unchanged) |
+| Zip install | works (test zip ran its update-binary) |
+| Reboot to system / recovery / download | works |
+| Power off | works: the next power-on boots the OS (poweroff.sh writes PON NORMALBOOT) |
+| Reboot to fastboot | hidden (Samsung has no bootloader fastboot) |
+| Tap to wake | not working: the touch controller does not report while the screen is blanked. Samsung's `aot_enable` accepts the command but no wake event arrives; needs the panel notifier |
 | USB-OTG storage | not yet tested |
-| Clock | RTC is read-only from an arbitrary epoch. From r7: `adb shell gts8u-time set $(date +%s)` once; the offset is kept on the cache partition and applied at boot. Untested |
-| Flashlight | from r8: led:torch_0 + led:switch_2 (from the stock camera-flash node). Untested; check the torch current |
-| Vibration | from r8: Samsung dc_vibrator through /sys/class/timed_output/vibrator (OF_USE_SAMSUNG_HAPTICS). Untested |
-| Wi-Fi | not yet; needs the qca_cld3 host module from vendor_dlkm and image space |
-| Power off | works: next power-on boots the OS (r11 writes PON NORMALBOOT from poweroff.sh; owner-verified) |
-| Timezone | `UTC0` has no tzdata entry; to be fixed |
+| Wi-Fi | not implemented (needs the qca_cld3 host module from vendor_dlkm) |
 | /data decryption (Samsung FBE) | not supported; on Android use multidisabler + Format Data. Never format on Linux-on-USERDATA setups |
 
 Notes:
 - Entering recovery with `reboot recovery` from another OS makes Samsung's bootloader
-  keep choosing recovery until recovery itself reboots (Reboot -> System). A forced
+  keep choosing recovery until recovery reboots or powers off through OrangeFox. A forced
   key-combo restart does not clear it.
 - On devices whose USERDATA holds a Linux root filesystem, OrangeFox mounts it as
   /data and keeps its settings in `<root>/media/Fox`. Never use Format Data there.
