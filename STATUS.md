@@ -27,7 +27,7 @@ stock X900XXS9EZA3 kernel (5.10.236) and modules. Latest tested build: r12.
 | Reboot to system / recovery / download | works |
 | Power off | works: the next power-on boots the OS (poweroff.sh writes PON NORMALBOOT) |
 | Reboot to fastboot | hidden (Samsung has no bootloader fastboot) |
-| Tap to wake | not working: the touch controller does not report while the screen is blanked. Samsung's `aot_enable` accepts the command but no wake event arrives; needs the panel notifier |
+| Tap to wake | from r13: double-tap wakes the blanked screen (panel truly off; the GT6936 keeps reporting touches). Untested |
 | USB-OTG storage | not yet tested |
 | Wi-Fi | not implemented (needs the qca_cld3 host module from vendor_dlkm) |
 | /data decryption (Samsung FBE) | not supported; on Android use multidisabler + Format Data. Never format on Linux-on-USERDATA setups |

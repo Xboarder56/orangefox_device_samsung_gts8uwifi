@@ -44,6 +44,12 @@ __gts8u_setup() {
     export FOX_USE_XZ_UTILS=1
     export FOX_ENABLE_APP_MANAGER=0
     export FOX_DELETE_AROMAFM=1
+    # Double-tap to wake. The GT6936 keeps reporting touches while OrangeFox
+    # powers the panel off, so OrangeFox's GUI double-tap detector works with
+    # real blanking. The GUI reads this from the environment (any non-empty
+    # value); "panel_off" rather than "1" avoids orangefox.mk's make-side
+    # check, which assumes the panel stays lit (TW_NO_SCREEN_BLANK).
+    export FOX_NO_BLANK_DT2W=panel_off
     export OF_MAINTAINER="${OF_MAINTAINER:-gts8uwifi}"
     local fw
     fw="$(sed -n 's/^GTS8U_STOCK_FIRMWARE := //p' "$dt/stock.mk" 2>/dev/null)"
