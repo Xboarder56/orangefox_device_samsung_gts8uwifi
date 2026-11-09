@@ -42,7 +42,3 @@ service gts8u-time /system/bin/gts8u-time apply
 on boot
     start gts8u-time
 
-# Leave recovery for good on power-off: tell Samsung's bootloader to boot
-# normally next time (a reboot overrides this with its own reason).
-on shutdown
-    exec - root root -- /system/bin/gts8u-normalboot
