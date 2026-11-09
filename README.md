@@ -24,6 +24,17 @@ See [STATUS.md](STATUS.md) for what has been tested on hardware.
   signed with the AOSP test key, so it boots only on an unlocked bootloader.
   Flash a `vbmeta` with verification disabled if your firmware refuses to boot it.
 
+## Encryption (/data)
+
+Decryption of Samsung's file-based encryption is **not supported** (`TW_INCLUDE_CRYPTO := false`).
+One UI keeps the keys in Samsung's TrustZone KeyMint, gatekeeper and weaver services, which
+this recovery does not ship. On stock Android, use the usual Samsung route: flash
+multidisabler, then **Format Data** once so /data is stored unencrypted.
+
+> **Linux users:** if your USERDATA partition holds a Linux root filesystem (for example a
+> postmarketOS or Fedora port), OrangeFox mounts it as /data and keeps its settings in
+> `<root>/media/Fox`. **Never use Format Data or Wipe Data** - it erases the Linux install.
+
 ## Building
 
 ```sh

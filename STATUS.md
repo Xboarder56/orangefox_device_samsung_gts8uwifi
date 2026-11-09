@@ -30,7 +30,7 @@ stock X900XXS9EZA3 kernel (5.10.236) and modules.
 | Wi-Fi | not yet; needs the qca_cld3 host module from vendor_dlkm and image space |
 | Power off | works, but does not clear Samsung's boot-recovery flag; with a charger attached the tablet powers back on into recovery. Use Reboot -> System first |
 | Timezone | `UTC0` has no tzdata entry; to be fixed |
-| /data decryption (Samsung FBE) | not supported |
+| /data decryption (Samsung FBE) | not supported; on Android use multidisabler + Format Data. Never format on Linux-on-USERDATA setups |
 
 Notes:
 - Entering recovery with `reboot recovery` from another OS makes Samsung's bootloader
