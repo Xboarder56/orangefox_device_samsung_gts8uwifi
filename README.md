@@ -12,14 +12,14 @@ touch, USB and storage behave like stock.
 
 Everything you normally use a recovery for:
 
-- Display and touch (portrait, USB port at the bottom), brightness, screen timeout
+- Display and touch (portrait, USB port at the bottom), brightness, screen timeout, double-tap to wake
 - adb and MTP over USB, microSD card
 - Backup and restore, installing zips
 - Mounting system, vendor, product and the other partitions inside `super`
 - Reboot to system, recovery or Download Mode, and power off
 - Battery, CPU temperature, flashlight, vibration, clock
 
-Not working yet: tap to wake (use the Power key), Wi-Fi, and decrypting Android's /data.
+Not working yet: Wi-Fi and decrypting Android's /data.
 USB-OTG drives are untested. The full list is in [STATUS.md](STATUS.md).
 
 ## Before you start
