@@ -133,9 +133,6 @@ TW_HAS_DOWNLOAD_MODE := true
 # provides adb, mtp, mtp,adb, sideload and fastboot triggers.
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_NO_REBOOT_BOOTLOADER := true
-# Samsung's bootloader has no fastboot mode: a reboot to fastboot lands in
-# Download Mode. Hide that reboot option (fastbootd inside recovery remains).
-TW_NO_FASTBOOT_BOOT := true
 TW_USE_LEGACY_BATTERY_SERVICES := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 TW_EXCLUDE_APEX := true
@@ -172,5 +169,8 @@ OF_FL_PATH2 := /sys/class/leds/led:switch_2
 OF_USE_SAMSUNG_HAPTICS := 1
 OF_USE_GREEN_LED := 0
 OF_ENABLE_LPTOOLS := 1
+# Samsung's bootloader has no fastboot mode: "Reboot -> Fastboot" lands in
+# Download Mode, so hide that menu entry.
+OF_NO_REBOOT_FASTBOOT := 1
 OF_QUICK_BACKUP_LIST := /boot;/dtbo;/vbmeta;
 OF_DEFAULT_TIMEZONE := UTC0
