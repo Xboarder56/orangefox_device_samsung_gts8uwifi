@@ -95,6 +95,9 @@ BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 0
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
 
 # Recovery
+# recovery/root (init scripts, twrp.flags, stock kernel modules). Must be a
+# board variable: the recovery ramdisk recipe reads it at Makefile time.
+TARGET_RECOVERY_DEVICE_DIRS += $(DEVICE_PATH)
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_RECOVERY_QCOM_RTC_FIX := true
@@ -153,4 +156,4 @@ OF_FLASHLIGHT_ENABLE := 0
 OF_USE_GREEN_LED := 0
 OF_ENABLE_LPTOOLS := 1
 OF_QUICK_BACKUP_LIST := /boot;/dtbo;/vbmeta;
-OF_DEFAULT_TIMEZONE := "UTC0"
+OF_DEFAULT_TIMEZONE := UTC0

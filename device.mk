@@ -7,9 +7,6 @@ LOCAL_PATH := device/samsung/gts8uwifi
 
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
 
-# Copy recovery/root (init scripts, fstab flags, stock kernel modules)
-TARGET_RECOVERY_DEVICE_DIRS += $(LOCAL_PATH)
-
 # The SM-X900 launched with Android 12 (vendor freeze level 31)
 PRODUCT_SHIPPING_API_LEVEL := 31
 BOARD_SHIPPING_API_LEVEL := 31
