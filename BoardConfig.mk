@@ -133,6 +133,9 @@ TW_HAS_DOWNLOAD_MODE := true
 # provides adb, mtp, mtp,adb, sideload and fastboot triggers.
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_NO_REBOOT_BOOTLOADER := true
+# Samsung's bootloader has no fastboot mode: a reboot to fastboot lands in
+# Download Mode. Hide that reboot option (fastbootd inside recovery remains).
+TW_NO_FASTBOOT_BOOT := true
 TW_USE_LEGACY_BATTERY_SERVICES := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 TW_EXCLUDE_APEX := true
