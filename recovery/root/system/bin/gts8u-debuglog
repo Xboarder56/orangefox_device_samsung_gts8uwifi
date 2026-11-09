@@ -1,17 +1,23 @@
 #!/system/bin/sh
-# Bring-up aid: copy recovery diagnostics to the cache partition so they can
-# be read from another OS when adb is unavailable. Enabled by
-# ro.gts8u.debuglog=1. Writes only to <cache>/fox-debug/.
-[ "$(getprop ro.gts8u.debuglog)" = 1 ] || exit 0
+# Diagnostics aid: copy recovery logs to the cache partition so they can be
+# read from another OS when adb is unavailable. Off by default; enabled by
+# ro.gts8u.debuglog=1 or by an existing <cache>/fox-debug/enable file
+# (adb shell touch /cache/fox-debug/enable). Writes only to <cache>/fox-debug/.
 DEV=/dev/block/bootdevice/by-name/cache
 MNT=/tmp/gts8u-cache
+mounted_here=0
 if grep -q " /cache " /proc/mounts; then
     MNT=/cache
 else
     mkdir -p $MNT
     mount -t ext4 -o rw,noatime $DEV $MNT 2>/dev/null || exit 0
+    mounted_here=1
 fi
 OUT=$MNT/fox-debug
+if [ "$(getprop ro.gts8u.debuglog)" != 1 ] && [ ! -e $OUT/enable ]; then
+    [ $mounted_here = 1 ] && umount $MNT
+    exit 0
+fi
 mkdir -p $OUT
 n=0
 while [ $n -lt 20 ]; do

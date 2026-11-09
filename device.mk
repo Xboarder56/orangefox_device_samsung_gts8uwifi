@@ -21,3 +21,9 @@ PRODUCT_PACKAGES += \
 
 # The recovery-only build ships a prebuilt kernel without config metadata
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+
+# IANA tzdata for bionic. Without any tzdata file bionic prints
+# "__bionic_open_tzdata: couldn't find any tzdata" on every process start
+# (every adb shell command) once a timezone is set.
+PRODUCT_COPY_FILES += \
+    system/timezone/output_data/iana/tzdata:$(TARGET_COPY_OUT_RECOVERY)/root/system/usr/share/zoneinfo/tzdata

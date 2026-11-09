@@ -95,6 +95,9 @@ start boot your system normally.
 
 - **Encrypted data:** this recovery cannot decrypt Samsung's encryption. To flash ROMs on
   stock Android, the usual route is to flash multidisabler and Format Data once.
+- **Reporting a problem:** `adb pull /tmp/recovery.log` while OrangeFox is running. If adb
+  does not work, run `adb shell touch /cache/fox-debug/enable` once (or create that file from
+  another OS); later boots then save logs to `/cache/fox-debug/`.
 - **Going back to stock:** flash your firmware's stock `recovery.img` the same way you
   installed OrangeFox.
 

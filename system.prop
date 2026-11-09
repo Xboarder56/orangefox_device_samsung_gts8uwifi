@@ -4,5 +4,6 @@ ro.board.platform=taro
 sys.usb.controller=a600000.dwc3
 ro.boot.dynamic_partitions=true
 ro.crypto.dm_default_key.options_format.version=2
-# Bring-up: save recovery diagnostics to <cache>/fox-debug (set 0 to disable)
-ro.gts8u.debuglog=1
+# Save recovery diagnostics to <cache>/fox-debug at boot. Off by default; set 1 here,
+# or create <cache>/fox-debug/enable (adb shell touch /cache/fox-debug/enable).
+ro.gts8u.debuglog=0
