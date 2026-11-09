@@ -25,8 +25,8 @@ stock X900XXS9EZA3 kernel (5.10.236) and modules.
 | Restore | not yet tested |
 | USB-OTG storage | not yet tested |
 | Clock | RTC is read-only from an arbitrary epoch. From r7: `adb shell gts8u-time set $(date +%s)` once; the offset is kept on the cache partition and applied at boot. Untested |
-| Flashlight | not enabled yet (needs the Samsung flash sysfs node) |
-| Vibration | not enabled yet (`sec_vibrator` loads; haptics path to be wired) |
+| Flashlight | from r8: led:torch_0 + led:switch_2 (from the stock camera-flash node). Untested; check the torch current |
+| Vibration | from r8: Samsung dc_vibrator through /sys/class/timed_output/vibrator (OF_USE_SAMSUNG_HAPTICS). Untested |
 | Wi-Fi | not yet; needs the qca_cld3 host module from vendor_dlkm and image space |
 | Power off | works, but does not clear Samsung's boot-recovery flag; with a charger attached the tablet powers back on into recovery. Use Reboot -> System first |
 | Timezone | `UTC0` has no tzdata entry; to be fixed |

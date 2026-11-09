@@ -161,7 +161,15 @@ OF_STATUS_INDENT_LEFT := 48
 OF_STATUS_INDENT_RIGHT := 48
 OF_USE_LEGACY_BATTERY_SERVICES := 1
 OF_NO_SPLASH_CHANGE := 1
-OF_FLASHLIGHT_ENABLE := 0
+# Rear flash: PM8350C torch channel 0 behind led switch 2 (stock camera-flash
+# node: torch-source torch_0/torch_1, switch-source switch_2, mask 0x03)
+OF_FLASHLIGHT_ENABLE := 1
+OF_FL_PATH1 := /sys/class/leds/led:torch_0
+OF_FL_PATH2 := /sys/class/leds/led:switch_2
+# Vibration: Samsung dc_vibrator (coin motor) via sec_vibrator's
+# /sys/class/timed_output/vibrator/enable. Use only that path, not the PMIC
+# haptics LED class, which is not wired to the motor.
+OF_USE_SAMSUNG_HAPTICS := 1
 OF_USE_GREEN_LED := 0
 OF_ENABLE_LPTOOLS := 1
 OF_QUICK_BACKUP_LIST := /boot;/dtbo;/vbmeta;
