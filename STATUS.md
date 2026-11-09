@@ -2,7 +2,7 @@
 
 Tested 2026-11-05 to 2026-11-09 on an SM-X900 (12 GB, board revision 5, bootloader
 X900XXU9DYDC) running OrangeFox R12.0 from `fox_16.0` (Android 16 base) with the
-stock X900XXS9EZA3 kernel (5.10.236) and modules. Latest tested build: r12.
+stock X900XXS9EZA3 kernel (5.10.236) and modules. Latest tested build: r14.
 
 | Feature | Status |
 |---|---|
