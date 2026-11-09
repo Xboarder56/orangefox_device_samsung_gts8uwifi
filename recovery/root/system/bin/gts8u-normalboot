@@ -1,0 +1,22 @@
+#!/system/bin/sh
+#
+# Copyright (C) 2026 The OrangeFox gts8uwifi device tree contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Run from init's "shutdown" trigger. Samsung's bootloader keeps booting
+# recovery after a power-off until it sees PON_RESTART_REASON_NORMALBOOT
+# (0x14), which Samsung's kernel writes on a normal reboot but skips on
+# power-off. Write it here; on reboots the kernel's reboot handler runs later
+# and replaces it with the real reason (recovery, download, ...).
+# Cell: PMK8350 SDAM at 0x7100, byte 0x48, bits 1..7 (stock DT restart@48).
+for d in /sys/bus/nvmem/devices/spmi_sdam*; do
+    r=$(od -An -tx1 "$d/of_node/reg" 2>/dev/null | tr -d ' \n')
+    [ "$r" = 00007100 ] || continue
+    f=$d/nvmem
+    old=$(dd if="$f" bs=1 skip=72 count=1 2>/dev/null | od -An -tu1 | tr -d ' ')
+    [ -n "$old" ] || exit 1
+    new=$(( (0x14 << 1) | (old & 1) ))
+    printf "\\$(printf %o $new)" | dd of="$f" bs=1 seek=72 count=1 conv=notrunc 2>/dev/null
+    exit 0
+done
+exit 1

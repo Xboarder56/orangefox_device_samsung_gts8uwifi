@@ -28,7 +28,7 @@ stock X900XXS9EZA3 kernel (5.10.236) and modules.
 | Flashlight | from r8: led:torch_0 + led:switch_2 (from the stock camera-flash node). Untested; check the torch current |
 | Vibration | from r8: Samsung dc_vibrator through /sys/class/timed_output/vibrator (OF_USE_SAMSUNG_HAPTICS). Untested |
 | Wi-Fi | not yet; needs the qca_cld3 host module from vendor_dlkm and image space |
-| Power off | works, but does not clear Samsung's boot-recovery flag; with a charger attached the tablet powers back on into recovery. Use Reboot -> System first |
+| Power off | from r10: writes PON NORMALBOOT on shutdown so the next power-on boots the OS (Samsung's bootloader otherwise stays in recovery) |
 | Timezone | `UTC0` has no tzdata entry; to be fixed |
 | /data decryption (Samsung FBE) | not supported; on Android use multidisabler + Format Data. Never format on Linux-on-USERDATA setups |
 
