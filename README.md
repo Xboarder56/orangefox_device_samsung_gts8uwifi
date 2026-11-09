@@ -10,8 +10,8 @@ Device tree for building [OrangeFox Recovery](https://gitlab.com/OrangeFox) for 
 | Image format | boot header v2: kernel + ramdisk + recovery DTBO + DTB, Samsung `SEANDROIDENFORCE` trailer, AVB hash footer |
 | Kernel | stock Samsung GKI 5.10, from the stock recovery image |
 | Kernel modules | stock vendor modules from the same image, loaded by first-stage init (`modules.load.recovery`) |
-| Display | 2960×1848 landscape OLED (`msm_drm`); OrangeFox's portrait UI is rotated 90° |
-| Touch | Goodix GT6936 (`goodix_ts_berlin`), rotated with the UI |
+| Display | 2960×1848 landscape OLED (`msm_drm`); OrangeFox's portrait UI is drawn rotated 270°, upright with the USB port at the bottom |
+| Touch | Goodix GT6936 (`goodix_ts_berlin`); its portrait coordinates map onto that UI 1:1 |
 
 ## Status
 
@@ -33,7 +33,7 @@ repo sync -c -j8 --no-clone-bundle --no-tags
 git clone <this repo> device/samsung/gts8uwifi
 
 export FOX_BUILD_DEVICE=gts8uwifi
-source build/envsetup.sh          # also applies patches/ to bootable/recovery
+source build/envsetup.sh
 lunch twrp_gts8uwifi-bp2a-eng
 mka recoveryimage
 ```
@@ -70,13 +70,6 @@ Then hold **Power + Volume Up** right after the screen goes dark to boot into re
 instead of the OS.
 
 To go back, flash the stock `recovery.img` the same way.
-
-## Patches
-
-`patches/0001-minuitwrp-rotate-touch-with-TW_ROTATION.patch` adds an opt-in
-`TW_ROTATE_TOUCH` build flag to minuitwrp. With it, touch coordinates get the inverse
-of the `TW_ROTATION` drawing transform, which a landscape-native panel running the
-portrait theme needs. `vendorsetup.sh` applies it.
 
 ## Credits and licensing
 

@@ -112,9 +112,11 @@ TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 PLATFORM_VERSION := 16
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 
-# TWRP: display. The 2960x1848 panel scans out landscape; the Goodix GT6936
-# reports portrait coordinates (1848x2960, Samsung's upright portrait). With
-# the portrait theme rotated 270 degrees the touch frame matches the UI 1:1.
+# TWRP: display. The 2960x1848 panel scans out landscape; the portrait theme
+# is drawn rotated 270 degrees, upright with the USB port at the bottom. In
+# that frame the Goodix GT6936 (portrait, 1848x2960) maps onto the UI 1:1.
+# Measured on SM-X900: with rotation 90 (USB on top) the status-bar clock read
+# raw (1706, 2878) and the battery (203, 2883), i.e. both axes reversed.
 TW_THEME := portrait_hdpi
 TW_ROTATION := 270
 TW_FRAMERATE := 60

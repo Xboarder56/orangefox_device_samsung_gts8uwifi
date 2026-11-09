@@ -42,5 +42,5 @@ vendor_dlkm                                /vendor_dlkm   f2fs   ro             
 /dev/block/bootdevice/by-name/super        /super         emmc   defaults                 defaults
 
 # Removable storage
-/dev/block/mmcblk0p1                       /external_sd   auto   defaults                 voldmanaged=sdcard1:auto
+/dev/block/mmcblk1p1                       /external_sd   auto   defaults                 voldmanaged=sdcard1:auto
 /dev/block/sdg1                            /usb-otg       auto   defaults                 voldmanaged=usb:auto
