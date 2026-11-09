@@ -1,0 +1,37 @@
+#!/system/bin/sh
+# Bring-up aid: copy recovery diagnostics to the cache partition so they can
+# be read from another OS when adb is unavailable. Enabled by
+# ro.gts8u.debuglog=1. Writes only to <cache>/fox-debug/.
+[ "$(getprop ro.gts8u.debuglog)" = 1 ] || exit 0
+DEV=/dev/block/bootdevice/by-name/cache
+MNT=/tmp/gts8u-cache
+if grep -q " /cache " /proc/mounts; then
+    MNT=/cache
+else
+    mkdir -p $MNT
+    mount -t ext4 -o rw,noatime $DEV $MNT 2>/dev/null || exit 0
+fi
+OUT=$MNT/fox-debug
+mkdir -p $OUT
+n=0
+while [ $n -lt 20 ]; do
+    dmesg > $OUT/dmesg.txt 2>&1
+    cp /tmp/recovery.log $OUT/recovery.log 2>/dev/null
+    getprop > $OUT/props.txt 2>&1
+    logcat -d > $OUT/logcat.txt 2>/dev/null
+    {
+        echo "== udc"; ls -l /sys/class/udc/ 2>&1
+        for f in /sys/class/udc/*/state /sys/class/udc/*/current_speed; do echo "$f: $(cat $f 2>&1)"; done
+        echo "== dwc3 mode: $(cat /sys/bus/platform/devices/a600000.ssusb/mode 2>&1)"
+        echo "== gadget UDC: $(cat /config/usb_gadget/g1/UDC 2>&1)"
+        ls -l /config/usb_gadget/g1/configs/b.1/ 2>&1
+        echo "== typec"; for p in /sys/class/typec/*; do echo "$p: $(cat $p/data_role $p/power_role 2>/dev/null | tr '\n' ' ')"; done
+        echo "== power_supply"; for p in /sys/class/power_supply/*; do echo "$p: $(cat $p/online $p/type 2>/dev/null | tr '\n' ' ')"; done
+        echo "== input"; cat /proc/bus/input/devices
+        echo "== lsmod"; cat /proc/modules | cut -d' ' -f1 | tr '\n' ' '
+        echo; echo "== mounts"; cat /proc/mounts
+    } > $OUT/state.txt 2>&1
+    sync
+    n=$((n + 1))
+    sleep 15
+done

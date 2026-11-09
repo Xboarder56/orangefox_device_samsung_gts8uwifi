@@ -112,19 +112,24 @@ TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 PLATFORM_VERSION := 16
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 
-# TWRP: display (2960x1848 landscape-native panel, portrait UI rotated)
+# TWRP: display. The 2960x1848 panel scans out landscape; the Goodix GT6936
+# reports portrait coordinates (1848x2960, Samsung's upright portrait). With
+# the portrait theme rotated 270 degrees the touch frame matches the UI 1:1.
 TW_THEME := portrait_hdpi
-TW_ROTATION := 90
-TW_ROTATE_TOUCH := true
+TW_ROTATION := 270
 TW_FRAMERATE := 60
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
-TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 160
+TW_MAX_BRIGHTNESS := 395
+TW_DEFAULT_BRIGHTNESS := 200
+TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone25/temp"
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_STATUS_ICONS_ALIGN := center
 
 # TWRP: device features
 TW_HAS_DOWNLOAD_MODE := true
+# Samsung GKI 5.10 has configfs gadgets only; recovery/root/init.recovery.usb.rc
+# provides adb, mtp, mtp,adb, sideload and fastboot triggers.
+TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_NO_REBOOT_BOOTLOADER := true
 TW_USE_LEGACY_BATTERY_SERVICES := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
@@ -136,7 +141,6 @@ TW_INCLUDE_LIBRESETPROP := true
 TW_INCLUDE_LPDUMP := true
 TW_INCLUDE_LPTOOLS := true
 TW_USE_TOOLBOX := true
-TW_NO_SCREEN_BLANK := true
 TW_BACKUP_EXCLUSIONS := /data/fonts
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true

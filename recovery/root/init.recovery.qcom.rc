@@ -8,20 +8,25 @@
 # /lib/modules/modules.load.recovery, as in the stock recovery.
 
 on init
-    write /sys/class/backlight/panel0-backlight/brightness 160
+    write /sys/class/backlight/panel0-backlight/brightness 200
     setprop sys.usb.controller a600000.dwc3
-    setprop sys.usb.configfs 1
 
     # Samsung: /efs is a symlink in the stock skeleton; use real mount points
     rm /efs
     mkdir /efs
     mkdir /sec_efs
 
-on property:ro.boot.usbcontroller=*
-    wait /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode
-    write /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode peripheral
-    wait /sys/class/udc/${ro.boot.usbcontroller} 1
-
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+# Bring-up diagnostics to the cache partition (ro.gts8u.debuglog=1)
+service gts8u-debuglog /system/bin/gts8u-debuglog
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+on boot
+    start gts8u-debuglog

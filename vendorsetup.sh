@@ -24,9 +24,11 @@ __gts8u_setup() {
     local top="${ANDROID_BUILD_TOP:-$(gettop 2>/dev/null)}"
     [ -n "$top" ] || top="$(pwd)"
     local dt="$top/device/samsung/$FDEVICE"
-    # Rotate touch input together with TW_ROTATION (opt-in, TW_ROTATE_TOUCH)
-    __gts8u_apply_patch "$top/bootable/recovery" \
-        "$dt/patches/0001-minuitwrp-rotate-touch-with-TW_ROTATION.patch"
+    # Apply any patches the tree carries for bootable/recovery
+    local p
+    for p in "$dt"/patches/*.patch; do
+        [ -e "$p" ] && __gts8u_apply_patch "$top/bootable/recovery" "$p"
+    done
 
     export FOX_BUILD_DEVICE="$FDEVICE"
     export FOX_TARGET_DEVICES="$FDEVICE"
