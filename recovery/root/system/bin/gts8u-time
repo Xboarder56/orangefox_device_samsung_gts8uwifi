@@ -30,6 +30,14 @@ rtc_now() { cat $RTC 2>/dev/null; }
 
 case "$1" in
 apply)
+    # TWRP's own Fixup_Time runs once during startup and sets the clock from
+    # /persist/time/ats_2 (kept current by Android's time daemon). Only
+    # override it when we hold an offset, and only after TWRP's GUI is up so
+    # its one-time fixup cannot overwrite ours.
+    n=0
+    while [ $n -lt 90 ] && ! grep -q "Set page" /tmp/recovery.log 2>/dev/null; do
+        sleep 1; n=$((n + 1))
+    done
     d=$(cache_dir) || exit 0
     [ -s "$d/$FILE_REL" ] || exit 0
     off=$(cat "$d/$FILE_REL")
