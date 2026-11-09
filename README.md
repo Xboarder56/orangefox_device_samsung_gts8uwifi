@@ -108,7 +108,7 @@ Rosetta works.
 mkdir ~/fox_16.0 && cd ~/fox_16.0
 repo init --depth=1 -u https://gitlab.com/OrangeFox/Manifest.git -b fox_16.0
 repo sync -c -j8 --no-clone-bundle --no-tags
-git clone <this repo> -b fox_16.0 device/samsung/gts8uwifi
+git clone https://github.com/Xboarder56/orangefox_device_samsung_gts8uwifi -b fox_16.0 device/samsung/gts8uwifi
 
 export FOX_BUILD_DEVICE=gts8uwifi
 source build/envsetup.sh
