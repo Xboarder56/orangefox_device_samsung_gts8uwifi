@@ -30,3 +30,14 @@ service gts8u-debuglog /system/bin/gts8u-debuglog
 
 on boot
     start gts8u-debuglog
+
+# Wall clock from the RTC plus the offset saved on the cache partition
+service gts8u-time /system/bin/gts8u-time apply
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
+on boot
+    start gts8u-time

@@ -20,11 +20,15 @@ stock X900XXS9EZA3 kernel (5.10.236) and modules.
 | MicroSD (`mmcblk1`) | works |
 | Backup (boot, dtbo, vbmeta) | works; images match the partitions byte for byte |
 | Reboot to system / recovery, power off | works |
-| Reboot to fastboot | goes to Samsung Download Mode (Samsung has no bootloader fastboot); to be fixed |
+| Reboot to fastboot | option hidden from r6 on (Samsung has no bootloader fastboot; it landed in Download Mode) |
 | Zip install | not yet tested |
 | Restore | not yet tested |
 | USB-OTG storage | not yet tested |
-| Clock | reads 2020 (RTC not applied yet) |
+| Clock | RTC is read-only from an arbitrary epoch. From r7: `adb shell gts8u-time set $(date +%s)` once; the offset is kept on the cache partition and applied at boot. Untested |
+| Flashlight | not enabled yet (needs the Samsung flash sysfs node) |
+| Vibration | not enabled yet (`sec_vibrator` loads; haptics path to be wired) |
+| Wi-Fi | not yet; needs the qca_cld3 host module from vendor_dlkm and image space |
+| Power off | works, but does not clear Samsung's boot-recovery flag; with a charger attached the tablet powers back on into recovery. Use Reboot -> System first |
 | Timezone | `UTC0` has no tzdata entry; to be fixed |
 | /data decryption (Samsung FBE) | not supported |
 

@@ -1,0 +1,56 @@
+#!/system/bin/sh
+#
+# Copyright (C) 2026 The OrangeFox gts8uwifi device tree contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Wall-clock time for recovery on the SM-X900. The PMIC RTC is read-only and
+# counts from an arbitrary epoch; Android adds an offset kept in encrypted
+# /data. This keeps our own offset (seconds) on the cache partition.
+#
+#   gts8u-time apply            set the clock from RTC + saved offset (boot)
+#   gts8u-time set <unix-secs>  set the clock and save the offset, e.g.
+#                               adb shell gts8u-time set $(date +%s)
+#   gts8u-time show             print RTC, offset and current time
+RTC=/sys/class/rtc/rtc0/since_epoch
+DEV=/dev/block/bootdevice/by-name/cache
+FILE_REL=recovery/gts8u_rtc_offset
+
+cache_dir() {
+    if grep -q " /cache " /proc/mounts; then
+        echo /cache
+        return 0
+    fi
+    mkdir -p /tmp/gts8u-cache
+    grep -q " /tmp/gts8u-cache " /proc/mounts ||
+        mount -t ext4 -o rw,noatime $DEV /tmp/gts8u-cache 2>/dev/null || return 1
+    echo /tmp/gts8u-cache
+}
+
+rtc_now() { cat $RTC 2>/dev/null; }
+
+case "$1" in
+apply)
+    d=$(cache_dir) || exit 0
+    [ -s "$d/$FILE_REL" ] || exit 0
+    off=$(cat "$d/$FILE_REL")
+    r=$(rtc_now)
+    case "$off$r" in *[!0-9-]*|"") exit 1 ;; esac
+    date @$((r + off)) >/dev/null
+    ;;
+set)
+    t="$2"
+    case "$t" in ""|*[!0-9]*) echo "usage: $0 set <unix-seconds>" >&2; exit 2 ;; esac
+    r=$(rtc_now) || exit 1
+    date @"$t" >/dev/null || exit 1
+    d=$(cache_dir) || { echo "cache partition unavailable; time set for this boot only" >&2; exit 1; }
+    mkdir -p "$d/recovery"
+    echo $((t - r)) > "$d/$FILE_REL" && sync
+    echo "offset $((t - r)) s saved; time now $(date)"
+    ;;
+show)
+    d=$(cache_dir)
+    echo "rtc: $(rtc_now)  offset: $(cat "$d/$FILE_REL" 2>/dev/null || echo none)  now: $(date)"
+    ;;
+*)
+    sed -n '11,15p' "$0"; exit 2 ;;
+esac
