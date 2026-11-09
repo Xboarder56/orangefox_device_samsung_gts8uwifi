@@ -1,0 +1,27 @@
+#
+# Copyright (C) 2026 The OrangeFox gts8uwifi device tree contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Recovery init for the Galaxy Tab S8 Ultra Wi-Fi (SM-X900). Based on the
+# stock init.recovery.qcom.rc and init.recovery.samsung.rc. The vendor
+# kernel modules are loaded by first-stage init from
+# /lib/modules/modules.load.recovery, as in the stock recovery.
+
+on init
+    write /sys/class/backlight/panel0-backlight/brightness 160
+    setprop sys.usb.controller a600000.dwc3
+    setprop sys.usb.configfs 1
+
+    # Samsung: /efs is a symlink in the stock skeleton; use real mount points
+    rm /efs
+    mkdir /efs
+    mkdir /sec_efs
+
+on property:ro.boot.usbcontroller=*
+    wait /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode
+    write /sys/bus/platform/devices/${ro.boot.usb.dwc3_msm:-a600000.ssusb}/mode peripheral
+    wait /sys/class/udc/${ro.boot.usbcontroller} 1
+
+on fs
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice

@@ -1,0 +1,6 @@
+# Samsung Galaxy Tab S8 Ultra Wi-Fi (SM-X900)
+ro.product.board=taro
+ro.board.platform=taro
+sys.usb.controller=a600000.dwc3
+ro.boot.dynamic_partitions=true
+ro.crypto.dm_default_key.options_format.version=2
